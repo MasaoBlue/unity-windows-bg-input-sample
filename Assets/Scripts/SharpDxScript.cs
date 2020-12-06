@@ -93,6 +93,6 @@ public class SharpDxScript : MonoBehaviour
     }
 
     KeyboardState state = keyboard.GetCurrentState();
-    return state.PressedKeys.Contains(key);
+    return state.IsPressed(key);
   }
 }
