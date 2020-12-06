@@ -5,30 +5,57 @@ using System;
 
 public class UnityRawInputScript : MonoBehaviour
 {
-  private readonly string TIME_FORMAT = @"hh\:mm\:ss\.ffff";
 
   [SerializeField]
-  public Text TextA;
+  public NowScript nowScript;
 
   [SerializeField]
-  public Text TextS;
+  public Text textA;
 
-  void Start()
+  [SerializeField]
+  public Text textS;
+
+  [SerializeField]
+  public Text textD;
+
+  [SerializeField]
+  public Text textF;
+
+  private readonly bool WORK_IN_BACKGROUND = true;
+
+  private readonly string UP_SUFFIX = " ";
+
+  private void Start()
   {
-    var workInBackground = true;
-    RawKeyInput.Start(workInBackground);
+    RawKeyInput.Start(WORK_IN_BACKGROUND);
   }
 
-  void Update()
+  private void Update()
   {
-    DateTime now = DateTime.Now;
-    if (RawKeyInput.IsKeyDown(RawKey.A))
+    UpdateText(RawKey.A, textA);
+    UpdateText(RawKey.S, textS);
+    UpdateText(RawKey.D, textD);
+    UpdateText(RawKey.F, textF);
+  }
+
+  private void UpdateText(RawKey key, Text text)
+  {
+    bool isUpped = text.text.EndsWith(UP_SUFFIX);
+
+    if (!RawKeyInput.IsKeyDown(key))
     {
-      TextA.text = now.ToString(TIME_FORMAT);
+      if (isUpped)
+      {
+        return;
+      }
+
+      text.text += UP_SUFFIX;
+      return;
     }
-    if (RawKeyInput.IsKeyDown(RawKey.S))
+
+    if (isUpped)
     {
-      TextS.text = now.ToString(TIME_FORMAT);
+      text.text = nowScript.GetNow();
     }
   }
 
